@@ -1,12 +1,20 @@
-FROM simonbaeumer/goss-docker:0.3.6-gitcrypt
+FROM sselzer/openshift-cli-gitcrypt
 MAINTAINER Simon Bäumer
 
-ENV OC_VERSION=v3.10.0
+ENV GOSS_FILES_STRATEGY=cp
+ENV GOSS_VERSION=v0.3.6
+ENV GOSS_PATH=/usr/bin/goss
 
-RUN wget https://github.com/openshift/origin/releases/download/${OC_VERSION}/openshift-origin-client-tools-${VERSION}-dd10d17-linux-64bit.tar.gz -O openshift.tar.gz
-RUN tar -xf openshift.tar.xf
-RUN mv openshift-origin-client-tools-${OC_VERSION}-dd10d17-linux-64bit/oc /usr/bin/oc
-RUN mv openshift-origin-client-tools-${OC_VERSION}-dd10d17-linux-64bit/kubectl /usr/bin/kubectl
+RUN apk update
+RUN apk add wget
 
-RUN chmod +x /usr/bin/oc
-RUN chmod +x /usr/bin/kubectl
+RUN wget https://github.com/aelsabbahy/goss/releases/download/${GOSS_VERSION}/goss-linux-amd64 -O /usr/bin/goss
+RUN chmod +x /usr/bin/goss
+
+RUN wget https://github.com/aelsabbahy/goss/releases/download/${GOSS_VERSION}/dgoss -O /usr/bin/dgoss
+RUN chmod +x /usr/bin/dgoss
+
+RUN mkdir /goss
+
+VOLUME /goss
+WORKDIR /goss
